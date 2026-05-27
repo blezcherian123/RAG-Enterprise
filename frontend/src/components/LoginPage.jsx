@@ -15,7 +15,6 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      // API call to login
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
@@ -43,17 +42,17 @@ function LoginPage() {
     <div className="auth-container">
       <div className="auth-card">
         <h1>Company RAG</h1>
-        <p className="auth-subtitle">Welcome back</p>
+        <p className="auth-subtitle">Login to your account</p>
 
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -65,7 +64,7 @@ function LoginPage() {
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

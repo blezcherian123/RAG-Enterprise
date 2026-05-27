@@ -26,7 +26,6 @@ function SignupPage() {
     e.preventDefault();
     setError("");
 
-    // Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -40,7 +39,6 @@ function SignupPage() {
     setLoading(true);
 
     try {
-      // API call to signup
       const response = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
         headers: {
@@ -71,9 +69,9 @@ function SignupPage() {
 
   return (
     <div className="auth-container">
-      <div className="auth-card signup-card">
+      <div className="auth-card">
         <h1>Company RAG</h1>
-        <p className="auth-subtitle">Create your account</p>
+        <p className="auth-subtitle">Create a new account</p>
 
         {error && <div className="error-message">{error}</div>}
 
@@ -85,7 +83,7 @@ function SignupPage() {
                 id="firstName"
                 type="text"
                 name="firstName"
-                placeholder="Enter your first name"
+                placeholder="First name"
                 value={formData.firstName}
                 onChange={handleChange}
                 required
@@ -98,21 +96,21 @@ function SignupPage() {
                 id="lastName"
                 type="text"
                 name="lastName"
-                placeholder="Enter your last name"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
+              placeholder="Last name"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="your@email.com"
               value={formData.email}
               onChange={handleChange}
               required
@@ -125,7 +123,7 @@ function SignupPage() {
               id="password"
               type="password"
               name="password"
-              placeholder="Enter your password (min 8 characters)"
+              placeholder="Min 8 characters"
               value={formData.password}
               onChange={handleChange}
               required
@@ -138,7 +136,7 @@ function SignupPage() {
               id="confirmPassword"
               type="password"
               name="confirmPassword"
-              placeholder="Confirm your password"
+              placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
