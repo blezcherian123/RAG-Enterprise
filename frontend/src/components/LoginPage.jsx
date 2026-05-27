@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../css/LoginPage.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -39,20 +38,13 @@ function LoginPage() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-branding">
-        <h2>WELCOME TO</h2>
-        <div className="logo">Company RAG</div>
-        <p>Intelligent enterprise knowledge management system powered by RAG</p>
-      </div>
-      <div className="auth-form-container">
-        <div className="auth-card">
-        <h1>Company RAG</h1>
-        <p className="auth-subtitle">Login to your account</p>
+    <>
+      <h1>Company RAG</h1>
+      <p className="auth-subtitle">Login to your account</p>
 
-        {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="auth-form">
+      <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -90,9 +82,7 @@ function LoginPage() {
             </Link>
           </p>
         </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

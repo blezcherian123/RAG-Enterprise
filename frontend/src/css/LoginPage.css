@@ -24,6 +24,7 @@
   height: 100vh;
   background: linear-gradient(135deg, #dc143c 0%, #c41c3b 100%);
   z-index: 1;
+  transition: transform 0.45s ease, opacity 0.45s ease;
 }
 
 .auth-branding {
@@ -40,6 +41,7 @@
   padding: 40px;
   text-align: center;
   z-index: 2;
+  transition: transform 0.45s ease, opacity 0.45s ease;
 }
 
 .auth-branding h2 {
@@ -48,6 +50,47 @@
   letter-spacing: 1px;
   margin-bottom: 20px;
   opacity: 0.95;
+}
+
+.auth-form-container {
+  margin-left: 40%;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #f8f8f8;
+  min-height: 100vh;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 50px 40px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  z-index: 10;
+}
+
+.auth-container.signup-mode .auth-branding {
+  transform: translateX(60vw);
+}
+
+.auth-container.signup-mode::before {
+  transform: translateX(60vw);
+}
+
+.auth-container.signup-mode .auth-form-container {
+  transform: translateX(-40vw);
+}
+
+.auth-container.login-mode .auth-branding,
+.auth-container.login-mode .auth-form-container,
+.auth-container.login-mode::before {
+  transform: translateX(0);
 }
 
 .auth-branding .logo {
@@ -63,17 +106,6 @@
   line-height: 1.6;
   opacity: 0.9;
   max-width: 280px;
-}
-
-/* Right Section - Form */
-.auth-form-container {
-  margin-left: 40%;
-  width: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  background: #f8f8f8;
 }
 
 /* ============================================
