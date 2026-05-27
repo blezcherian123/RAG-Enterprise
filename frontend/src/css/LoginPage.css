@@ -6,14 +6,74 @@
 
 .auth-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-  padding: 20px;
+  overflow: hidden;
+}
+
+/* Left Section - Branding */
+.auth-container::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40%;
+  height: 100vh;
+  background: linear-gradient(135deg, #dc143c 0%, #c41c3b 100%);
+  z-index: 1;
+}
+
+.auth-branding {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 40px;
+  text-align: center;
+  z-index: 2;
+}
+
+.auth-branding h2 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  opacity: 0.95;
+}
+
+.auth-branding .logo {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+}
+
+.auth-branding p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 280px;
+}
+
+/* Right Section - Form */
+.auth-form-container {
+  margin-left: 40%;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #f8f8f8;
 }
 
 /* ============================================
@@ -22,18 +82,18 @@
 
 .auth-card {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 50px 40px;
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
   position: relative;
   z-index: 10;
 }
 
 .auth-card h1 {
   margin: 0 0 10px 0;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
   color: #333;
   text-align: center;
@@ -43,7 +103,7 @@
 .auth-subtitle {
   margin: 0 0 30px 0;
   font-size: 14px;
-  color: #666;
+  color: #999;
   text-align: center;
   font-weight: 500;
   line-height: 1.6;
@@ -62,6 +122,8 @@
   font-size: 14px;
   border-left: 4px solid #c00;
   font-weight: 500;
+  background: rgba(255, 100, 100, 0.95);
+  color: #fff;
 }
 
 /* ============================================
@@ -91,7 +153,7 @@
 .form-group label {
   font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: #555;
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -103,7 +165,7 @@
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.95);
   box-sizing: border-box;
 }
 
@@ -123,7 +185,7 @@
 
 .auth-button {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #dc143c;
   color: white;
   border: none;
   border-radius: 6px;
@@ -133,14 +195,17 @@
   margin-top: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 }
 
 .auth-button:hover:not(:disabled) {
-  opacity: 0.9;
+  background: #b91230;
+  box-shadow: 0 6px 20px rgba(220, 20, 60, 0.3);
 }
 
 .auth-button:active:not(:disabled) {
-  opacity: 0.85;
+  background: #9d0d28;
+  box-shadow: 0 3px 10px rgba(220, 20, 60, 0.2);
 }
 
 .auth-button:disabled {
@@ -165,7 +230,7 @@
 }
 
 .auth-link {
-  color: #667eea;
+  color: #dc143c;
   text-decoration: none;
   font-weight: 700;
 }
