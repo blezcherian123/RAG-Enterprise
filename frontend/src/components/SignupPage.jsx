@@ -38,25 +38,26 @@ function SignupPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch("http://localhost:8000/api/v1/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
           email: formData.email,
           password: formData.password,
+          full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+          tenant_name: "default",
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Signup failed. Please try again.");
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.detail || "Signup failed. Please try again.");
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.access_token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/dashboard");
     } catch (err) {

@@ -14,21 +14,28 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const formData = new URLSearchParams();
+      formData.append("username", email);
+      formData.append("password", password);
+
+      const response = await fetch("http://localhost:8000/api/v1/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          tenant_name: "default",
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Invalid email or password");
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.detail || "Invalid email or password");
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user ?? { email }));
       navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
