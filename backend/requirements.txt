@@ -13,3 +13,5 @@ langgraph
 openai 
 pgvector 
 tiktoken
+email-validator
+python-dotenv
