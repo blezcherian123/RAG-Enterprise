@@ -163,9 +163,14 @@
   gap: 14px;
 }
 
+.form-row > * {
+  min-width: 0;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .form-group label {
@@ -184,6 +189,8 @@
   font-size: 15px;
   font-family: inherit;
   background: white;
+  width: 100%;
+  min-width: 0;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -306,6 +313,18 @@
   .auth-card {
     padding: 40px 36px;
     max-width: 440px;
+  }
+
+  /* At tablet widths the two-column name fields get too cramped.
+     Stack them to prevent the input from overflowing its container. */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .form-group input {
+    width: 100%;
+    min-width: 0;
   }
 }
 
