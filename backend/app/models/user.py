@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 
-from app.db.base import Base
+from app.database import Base
 
 
 class User(Base):
@@ -13,7 +13,7 @@ class User(Base):
     email = Column(String(255), nullable=False, index=True)
     full_name = Column(String(255), nullable=True)
     hashed_password = Column(String(255), nullable=False)
-    is_active = Column(Boolean(), default=True, nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     tenant = relationship("Tenant", backref="users")

@@ -1,19 +1,19 @@
-from typing import Generator
+from collections.abc import Generator
 
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
-from app.core.config import settings
+from app.config import settings
+from app.database import get_db
 from app.models.tenant import Tenant
-from app.db.session import get_db
-from app.services.tenant_service import get_tenant_by_id
+from app.services.tenant import get_tenant_by_id
 
 
 def get_db_session() -> Generator[Session, None, None]:
-    yield from get_db()
+    return get_db()
 
 
-def get_tenant_header(request: Request) -> str:
+def get_tenant_id(request: Request) -> str:
     tenant_id = getattr(request.state, "tenant_id", None)
     if not tenant_id:
         raise HTTPException(
@@ -25,12 +25,9 @@ def get_tenant_header(request: Request) -> str:
 
 def get_current_tenant(
     db: Session = Depends(get_db_session),
-    tenant_id: str = Depends(get_tenant_header),
+    tenant_id: str = Depends(get_tenant_id),
 ) -> Tenant:
-    tenant = get_tenant_by_id(db, tenant_id=tenant_id)
+    tenant = get_tenant_by_id(db, tenant_id)
     if not tenant:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Tenant not found",
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
     return tenant

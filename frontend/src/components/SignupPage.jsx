@@ -15,10 +15,7 @@ function SignupPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -40,9 +37,7 @@ function SignupPage() {
     try {
       const response = await fetch("http://localhost:8000/api/v1/auth/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -72,89 +67,95 @@ function SignupPage() {
       <h1>Company RAG</h1>
       <p className="auth-subtitle">Create a new account</p>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message" role="alert">{error}</div>}
 
-      <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
-              <input
-                id="firstName"
-                type="text"
-                name="firstName"
-                placeholder="First name"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-            </div>
+      <form onSubmit={handleSubmit} className="auth-form" noValidate>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="signup-first">First Name</label>
+            <input
+              id="signup-first"
+              type="text"
+              name="firstName"
+              placeholder="First name"
+              autoComplete="given-name"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
-              <input
-                id="lastName"
-                type="text"
-                name="lastName"
+          <div className="form-group">
+            <label htmlFor="signup-last">Last Name</label>
+            <input
+              id="signup-last"
+              type="text"
+              name="lastName"
               placeholder="Last name"
+              autoComplete="family-name"
               value={formData.lastName}
               onChange={handleChange}
               required
             />
-            </div>
           </div>
-
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="your@email.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Min 8 characters"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              name="confirmPassword"
-              placeholder="••••••••"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? "Creating account..." : "Sign Up"}
-          </button>
-        </form>
-
-        <div className="auth-footer">
-          <p>
-            Already have an account?{" "}
-            <Link to="/login" className="auth-link">
-              Login
-            </Link>
-          </p>
         </div>
+
+        <div className="form-group">
+          <label htmlFor="signup-email">Email</label>
+          <input
+            id="signup-email"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            autoComplete="email"
+            inputMode="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="signup-password">Password</label>
+          <input
+            id="signup-password"
+            type="password"
+            name="password"
+            placeholder="Min 8 characters"
+            autoComplete="new-password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="signup-confirm">Confirm Password</label>
+          <input
+            id="signup-confirm"
+            type="password"
+            name="confirmPassword"
+            placeholder="Re-enter password"
+            autoComplete="new-password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <button type="submit" className="auth-button" disabled={loading}>
+          {loading ? "Creating account..." : "Sign Up"}
+        </button>
+      </form>
+
+      <div className="auth-footer">
+        <p>
+          Already have an account?{" "}
+          <Link to="/login" className="auth-link">
+            Login
+          </Link>
+        </p>
+      </div>
     </>
   );
 }

@@ -1,16 +1,12 @@
 from pydantic import BaseModel, Field
 
 
-class TenantBase(BaseModel):
+class TenantCreate(BaseModel):
     name: str = Field(..., min_length=3, max_length=128)
 
 
-class TenantCreate(TenantBase):
-    pass
-
-
-class TenantOut(TenantBase):
+class TenantOut(TenantCreate):
     id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

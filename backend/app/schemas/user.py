@@ -1,11 +1,9 @@
-from typing import Optional
-
 from pydantic import BaseModel, EmailStr, Field
 
 
 class UserBase(BaseModel):
     email: EmailStr
-    full_name: Optional[str] = None
+    full_name: str | None = None
 
 
 class UserCreate(UserBase):
@@ -18,7 +16,7 @@ class UserOut(UserBase):
     is_active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):
@@ -26,10 +24,5 @@ class Token(BaseModel):
     token_type: str = "bearer"
 
 
-class TokenUserResponse(Token):
+class TokenWithUser(Token):
     user: UserOut
-
-
-class TokenData(BaseModel):
-    sub: Optional[str] = None
-    tenant_id: Optional[str] = None

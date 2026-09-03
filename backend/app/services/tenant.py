@@ -12,8 +12,8 @@ def get_tenant_by_name(db: Session, name: str) -> Tenant | None:
     return db.query(Tenant).filter(Tenant.name == name).first()
 
 
-def create_tenant(db: Session, tenant_in: TenantCreate) -> Tenant:
-    tenant = Tenant(name=tenant_in.name)
+def create_tenant(db: Session, data: TenantCreate) -> Tenant:
+    tenant = Tenant(name=data.name)
     db.add(tenant)
     db.commit()
     db.refresh(tenant)
