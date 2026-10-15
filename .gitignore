@@ -104,3 +104,6 @@ package-lock.json
 yarn.lock
 
 # End of .gitignore
+
+docs/
+ai_projects
