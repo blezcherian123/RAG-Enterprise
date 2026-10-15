@@ -10,7 +10,7 @@ from app.services.tenant import get_tenant_by_id
 
 
 def get_db_session() -> Generator[Session, None, None]:
-    return get_db()
+    yield from get_db()
 
 
 def get_tenant_id(request: Request) -> str:
