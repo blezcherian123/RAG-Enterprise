@@ -34,3 +34,9 @@ app.include_router(v1_router, prefix=settings.API_V1_PREFIX)
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
+
+@app.get("/v1/models")
+def get_models_direct():
+    """Direct endpoint matching frontend request path."""
+    return ["hr", "employee", "finance", "c_level"]

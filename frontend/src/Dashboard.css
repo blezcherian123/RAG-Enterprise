@@ -1,0 +1,246 @@
+/*
+ * Dashboard.css - Styles for the post-signin Dashboard page
+ * Visually pleasing design with role-coded button colors and modern UI
+ */
+
+/* Dashboard Container */
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
+/* Glassmorphism container */
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 2rem;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: center;
+  background: rgba(45, 41, 41, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 2rem;
+  color: #0e0d0d;
+}
+
+.nav-list {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: #a30000;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ffd700;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #b1afaf, #0e0d0d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dashboard-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+  color: #0e0d0d;
+}
+
+/* User Role Display */
+.user-role {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+/* Button Grid */
+.button-grid {
+  display: grid;
+  gap: 1.5rem;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Vertical button layout */
+.button-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Button Base Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+}
+
+/* HR Button - Green theme */
+.btn-hr {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(79, 172, 254, 0.4);
+}
+
+.btn-hr:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(79, 172, 254, 0.5);
+}
+
+.btn-hr:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-hr:focus-visible {
+  outline: 2px solid #2c5aa0;
+  outline-offset: 2px;
+}
+
+/* Employee Button - Blue theme */
+.btn-employee {
+  background: linear-gradient(135deg, #43e97b 0%, #38bdf8 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(67, 233, 123, 0.4);
+}
+
+.btn-employee:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(67, 233, 123, 0.5);
+}
+
+.btn-employee:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-employee:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* Finance Employee Button - Teal/orange theme */
+.btn-finance {
+  background: linear-gradient(135deg, #f6e05e 0%, #f5a623 100%);
+  color: #1e293b;
+  box-shadow: 0 4px 20px rgba(246, 224, 94, 0.4);
+}
+
+.btn-finance:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(246, 224, 94, 0.5);
+}
+
+.btn-finance:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-finance:focus-visible {
+  outline: 2px solid #92400e;
+  outline-offset: 2px;
+}
+
+/* C Level Button - Purple theme */
+.btn-c-level {
+  background: linear-gradient(135deg, #a855f7 0%, #d946ef 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+}
+
+.btn-c-level:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5);
+}
+
+.btn-c-level:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-c-level:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Loading State (if needed) */
+.loading-spinner {
+  text-align: center;
+  padding: 2rem;
+  color: white;
+  font-size: 1.2rem;
+}
