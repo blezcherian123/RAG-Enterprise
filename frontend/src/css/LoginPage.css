@@ -2,8 +2,8 @@
    VARIABLES
    ============================================ */
 :root {
-  --brand: #dc143c;
-  --brand-dark: #b91230;
+  --brand: #bbdc14;
+  --brand-dark: #b99512;
   --brand-darker: #9d0d28;
   --brand-glow: rgba(220, 20, 60, 0.3);
   --split-left: 40%;

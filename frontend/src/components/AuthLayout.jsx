@@ -9,7 +9,7 @@ function AuthLayout() {
     <div className={`auth-container ${mode}`}>
       <div className="auth-branding">
         <h2>WELCOME TO</h2>
-        <div className="logo">Company RAG</div>
+        <div className="logo">Homeegram</div>
         <p>Intelligent enterprise knowledge management system powered by RAG</p>
       </div>
 

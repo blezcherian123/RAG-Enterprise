@@ -42,7 +42,7 @@ function LoginPage() {
 
   return (
     <>
-      <h1>Company RAG</h1>
+      <h1>Homeegram</h1>
       <p className="auth-subtitle">Login to your account</p>
 
       {error && <div className="error-message" role="alert">{error}</div>}

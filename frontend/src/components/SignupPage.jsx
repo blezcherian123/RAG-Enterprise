@@ -64,7 +64,7 @@ function SignupPage() {
 
   return (
     <>
-      <h1>Company RAG</h1>
+      <h1>Homeegram</h1>
       <p className="auth-subtitle">Create a new account</p>
 
       {error && <div className="error-message" role="alert">{error}</div>}
