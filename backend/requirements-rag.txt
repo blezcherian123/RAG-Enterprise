@@ -1,0 +1,6 @@
+# Optional dependencies for the retrieval/chat implementation when it is added.
+pgvector
+tiktoken
+langchain
+langgraph
+openai

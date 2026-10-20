@@ -1,161 +1,127 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
+import { apiUrl } from "./api";
 
-import NavBar from "./components/NavBar";
-import ChatBot from "./components/ChatBot";
+const roleOptions = [
+  { id: "hr", name: "People & HR", description: "Policies, hiring, benefits and people operations", icon: "✳", tone: "violet" },
+  { id: "employee", name: "Employee", description: "Your workplace, tools and everyday questions", icon: "◉", tone: "blue" },
+  { id: "finance", name: "Finance", description: "Expenses, budgets and financial guidance", icon: "◈", tone: "amber" },
+  { id: "c_level", name: "Executive", description: "Company insights for leadership", icon: "⌁", tone: "mint" },
+];
 
-/**
- * Dashboard Page - Appears after user sign-in
- * Shows 4 role-based navigation buttons:
- * - HR
- * - Employee
- * - Finance Employee
- * - C level employees
- *
- * The buttons are color-coded and styled based on typical role associations,
- * and each navigates to a relevant section/page.
- */
 function Dashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const signOutStarted = useRef(false);
+  const profileRef = useRef(null);
 
-  // Parse JWT token from localStorage to determine user role
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      setLoading(false);
-      setError("No authentication token found");
-      navigate("/login");
-      return;
+      navigate("/login", { replace: true });
+      return undefined;
     }
-
-    try {
-      // Decode the JWT token payload without verification for role detection
-      // In production, verify the token signature for security
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      setUser(payload);
-      setError(""); // Clear any previous error
-    } catch (error) {
-      console.error("Failed to decode authentication token", error);
-      setUser(null);
-      setError("Invalid or expired authentication token. Please log in again.");
-    } finally {
-      setLoading(false);
-    }
+    let active = true;
+    const headers = { Authorization: `Bearer ${token}` };
+    fetch(apiUrl("/api/v1/users/me"), { headers }).then(async (profileResponse) => {
+      if (profileResponse.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login", { replace: true });
+        return;
+      }
+      if (!profileResponse.ok) throw new Error("We couldn’t load your workspace profile.");
+      const profile = await profileResponse.json();
+      if (active) {
+        setUser(profile);
+        localStorage.setItem("user", JSON.stringify(profile));
+      }
+    }).catch((error) => {
+      if (active) setLoadError(error.message || "We couldn’t load your workspace.");
+    });
+    return () => { active = false; };
   }, [navigate]);
 
-  // Determine user role from token payload
-  const getUserRole = () => {
-    if (!user) return "guest";
+  useEffect(() => {
+    if (!profileOpen) return undefined;
+    const closeOnOutsideClick = (event) => {
+      if (!profileRef.current?.contains(event.target)) setProfileOpen(false);
+    };
+    const closeOnEscape = (event) => { if (event.key === "Escape") setProfileOpen(false); };
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [profileOpen]);
 
-    const role = (user.role || user.role_name || user.type || "").toLowerCase();
-    if (role.includes("hr") || role.includes("human resources")) return "hr";
-    if (role.includes("c-level") || role.includes("ceo") || role.includes("cfo") || role.includes("cto") || role.includes("executive")) return "c_level";
-    if (role.includes("finance")) return "finance";
-    return "employee";
+  const signOut = (event) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+    if (signOutStarted.current) return;
+    signOutStarted.current = true;
+    const token = localStorage.getItem("token");
+    setProfileOpen(false);
+    if (token) {
+      void fetch(apiUrl("/api/v1/auth/logout"), {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        keepalive: true,
+      }).catch(() => {});
+    }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login", { replace: true });
   };
 
-  const role = getUserRole();
+  if (!user) return <div className="dashboard-loading" role={loadError ? "alert" : "status"}><p>{loadError || "Loading your secure workspace…"}</p>{loadError && <><button onClick={() => window.location.reload()}>Try again</button><button onClick={signOut}>Sign out</button></>}</div>;
 
-  const [showChat, setShowChat] = useState(false);
-  const [chatRole, setChatRole] = useState("");
-
-  // Navigate based on button clicked (optional)
-  const handleButtonClick = (targetRole) => {
-    // Open chatbot for the selected role
-    setChatRole(targetRole);
-    setShowChat(true);
-    // If you still want navigation, uncomment the line below
-    // navigate(`/${targetRole.toLowerCase()}`);
-  };
-
-  if (loading) {
-    return <div className="loading-spinner">Loading...</div>;
-  }
-
-  // Show error state if token decoding failed
-  if (error && !user) {
-    return (
-      <div className="error-state">
-        <h3>Authentication Error</h3>
-        <p>{error}</p>
-        <button
-          className="btn btn-hr"
-          onClick={() => navigate("/login")}
-          style={{ marginTop: "1rem" }}
-        >
-          Go to Login
-        </button>
-      </div>
-    );
-  }
-
-  // If no user, redirect to login
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
+  const email = user.email || "your workspace";
+  const displayName = user.full_name || email.split("@")[0];
+  const displayRole = user.role === "c_level" ? "Executive" : user.role === "finance" ? "Finance" : user.role === "hr" ? "People & HR" : user.role === "admin" ? "Workspace admin" : "Employee";
 
   return (
-    <div className="dashboard-container glass-card">
-  <NavBar />
-      <header className="dashboard-header">
-        <h1>Welcome back!</h1>
-        <p>Homeegram - Intelligent enterprise knowledge management</p>
+    <div className="dashboard-shell">
+      <header className="dashboard-topbar">
+        <a className="brand-mark" href="/dashboard" aria-label="Homeegram home"><span className="brand-orbit">h</span><span>Homeegram</span></a>
+        <div className="topbar-right">
+          <span className="secure-label"><span /> Secure workspace</span>
+          <div className="profile-menu-wrap" ref={profileRef}>
+            <button className={`profile-button ${profileOpen ? "profile-button-open" : ""}`} onClick={() => setProfileOpen((open) => !open)} aria-expanded={profileOpen} aria-haspopup="menu" aria-label="Open profile menu"><span>{displayName.charAt(0).toUpperCase()}</span><i>⌄</i></button>
+            {profileOpen && <div className="profile-menu" role="menu">
+              <div className="profile-menu-heading"><span className="profile-avatar-large">{displayName.charAt(0).toUpperCase()}</span><span><strong>{displayName}</strong><small>{email}</small></span></div>
+              <div className="profile-menu-meta"><span>Workspace role</span><strong>{displayRole}</strong></div>
+              <button type="button" className="signout-button" role="menuitem" onClick={signOut}><span>↪</span> Sign out</button>
+            </div>}
+          </div>
+        </div>
       </header>
 
-      <main className="dashboard-content">
-        <p className="user-role">Role: {role.toUpperCase()}</p>
+      <main className="dashboard-main">
+        <section className="welcome-block">
+          <div className="eyebrow"><span className="eyebrow-line" /> YOUR WORKSPACE ASSISTANTS</div>
+          <h1>Good to have you<br className="mobile-break" /> ❤<span className="title-period"></span></h1>
+        </section>
 
-        <div className="button-vertical">
-          {/* HR Button - Green for HR/People operations */}
-          <button
-            className="btn btn-hr"
-            onClick={() => handleButtonClick("HR")}
-            aria-label="HR Dashboard"
-            title="HR Department"
-          >
-            <span>HR</span>
-          </button>
-
-          {/* Employee Button - Blue for general employees */}
-          <button
-            className="btn btn-employee"
-            onClick={() => handleButtonClick("Employee")}
-            aria-label="Employee Dashboard"
-            title="Employee Self-Service"
-          >
-            <span>Employee</span>
-          </button>
-
-          {/* Finance Employee Button - Orange/Teal for finance */}
-          <button
-            className="btn btn-finance"
-            onClick={() => handleButtonClick("Finance Employee")}
-            aria-label="Finance Employee Dashboard"
-            title="Finance Department"
-          >
-            <span>Finance<br/>Employee</span>
-          </button>
-
-          {/* C Level Button - Purple for executives */}
-          <button
-            className="btn btn-c-level"
-            onClick={() => handleButtonClick("C Level")}
-            aria-label="C-Level Executive Dashboard"
-            title="Executive Leadership"
-          >
-            <span>C Level<br/>Employees</span>
-          </button>
-        </div>
-        {showChat && (
-          <ChatBot role={chatRole} onClose={() => setShowChat(false)} />
-        )}
+        <section className="role-section" aria-labelledby="role-heading">
+          <div className="section-heading"><div><h2 id="role-heading">Your assistants</h2><p>Choose a role to start a conversation</p></div><span className="access-pill"><span className="access-dot" /> 4 assistants available</span></div>
+          <div className="role-grid">
+            {roleOptions.map((option, index) => {
+              return <button key={option.id} className={`role-card ${option.tone}`} style={{ "--card-index": index }} onClick={() => navigate(`/chat/${option.id}`)} aria-label={`Open ${option.name} assistant`}>
+                <span className="role-card-top"><span className="role-icon">{option.icon}</span><span className="card-arrow">↗</span></span>
+                <span className="role-card-copy"><strong>{option.name}</strong><span>{option.description}</span></span>
+                <span className="role-card-bottom"><span>Start a conversation</span><span className="arrow-long">→</span></span>
+              </button>;
+            })}
+          </div>
+        </section>
+        <footer className="dashboard-footer"><span>Explore all four role assistants</span><span className="footer-spark">✦</span><span>Company chat service coming soon</span></footer>
       </main>
+
     </div>
   );
 }

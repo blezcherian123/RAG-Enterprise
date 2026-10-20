@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from uuid import uuid4
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -8,6 +9,8 @@ from app.config import settings
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 ALGORITHM = "HS256"
+TOKEN_ISSUER = "homeegram"
+TOKEN_AUDIENCE = "homeegram-api"
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -20,12 +23,27 @@ def hash_password(password: str) -> str:
 
 def create_access_token(subject: str, tenant_id: str, expires_delta: timedelta | None = None) -> str:
     expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
-    payload = {"sub": subject, "tenant_id": tenant_id, "exp": expire}
+    payload = {
+        "sub": subject,
+        "tenant_id": tenant_id,
+        "iss": TOKEN_ISSUER,
+        "aud": TOKEN_AUDIENCE,
+        "jti": uuid4().hex,
+        "iat": datetime.now(timezone.utc),
+        "exp": expire,
+    }
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=ALGORITHM)
 
 
 def decode_access_token(token: str) -> dict:
     try:
-        return jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+        return jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[ALGORITHM],
+            issuer=TOKEN_ISSUER,
+            audience=TOKEN_AUDIENCE,
+            options={"require_exp": True, "require_iat": True, "require_sub": True},
+        )
     except JWTError as exc:
         raise ValueError("Could not validate credentials") from exc

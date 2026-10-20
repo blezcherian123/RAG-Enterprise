@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.user import User
@@ -15,15 +16,27 @@ def create_user(db: Session, tenant_id: str, data: UserCreate) -> User:
         email=data.email,
         full_name=data.full_name,
         hashed_password=hash_password(data.password),
+        role=data.role.value,
     )
     db.add(user)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise ValueError("Email already exists for this tenant") from exc
     db.refresh(user)
     return user
 
 
-def list_users(db: Session, tenant_id: str) -> list[User]:
-    return db.query(User).filter(User.tenant_id == tenant_id).all()
+def list_users(db: Session, tenant_id: str, *, offset: int = 0, limit: int = 50) -> list[User]:
+    return (
+        db.query(User)
+        .filter(User.tenant_id == tenant_id)
+        .order_by(User.id)
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
 
 
 def authenticate_user(db: Session, tenant_id: str, email: str, password: str) -> User | None:

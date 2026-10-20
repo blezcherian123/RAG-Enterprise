@@ -6,7 +6,7 @@ function AuthLayout() {
   const mode = pathname.includes("/signup") ? "signup-mode" : "login-mode";
 
   return (
-    <div className={`auth-container ${mode}`}>
+    <div key={mode} className={`auth-container ${mode}`}>
       <div className="auth-branding">
         <h2>WELCOME TO</h2>
         <div className="logo">Homeegram</div>
